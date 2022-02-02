@@ -12,7 +12,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../')
 # ----------------------------------------------------------------------
 
 import unittest
-from src.color_log import log
+from src.color_log.clog import log
 
 
 class TestScenes(unittest.TestCase):
