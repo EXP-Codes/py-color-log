@@ -30,7 +30,7 @@
 在代码中引入 py-color-log 包即可：
 
 ```python
-from color_log import log
+from color_log.clog import log
 
 log.debug('这是 DEBUG 日志，白色')
 log.info('这是 INFO 日志，青绿')
@@ -45,7 +45,7 @@ except :
 可以通过构造函数调整日志配置：
 
 ```python
-from color_log import ColorLog
+from color_log.clog import ColorLog
 
 '''
 [param] log_dir: 日志输出目录
