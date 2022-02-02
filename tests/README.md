@@ -2,4 +2,4 @@
 
 ------
 
-TODO
+测试脚本： `python ./tests/test_color_log.py`
