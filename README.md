@@ -1,6 +1,6 @@
 # py-color-log
 
-> python 有颜色的日志
+> python 颜色缤纷的日志
 
 ------
 
