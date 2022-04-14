@@ -16,7 +16,7 @@ _APP_LOGS = {
 }
 
 _CHARSET = 'utf-8'
-_LOGFILE_FORMAT = '%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] - %(message)s'
+_LOGFILE_FORMAT = '%(asctime)s [%(levelname)s] - %(message)s'
 _DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 _LOG_COLORS = {
