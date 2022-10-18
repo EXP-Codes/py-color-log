@@ -32,6 +32,10 @@ _DISABLE_THIRD_LIST = [
     'chardet.charsetprober'
 ]
 
+MODE_ALL_LOG = 0          # 打印所有日志
+MODE_CONSOLE_LOG = 1      # 仅打印控制台日志
+MODE_FILE_LOG = 2         # 仅打印文件日志
+
 
 class ColorLog:
     '''
@@ -39,12 +43,13 @@ class ColorLog:
     '''
 
     def __init__(self, 
-            log_dir=_LOG_DIR, app_logs=_APP_LOGS, 
+            name=None, log_dir=_LOG_DIR, app_logs=_APP_LOGS, 
             logfile_format=_LOGFILE_FORMAT, date_format=_DATE_FORMAT, log_colors=_LOG_COLORS, 
-            rollday=1, backupdays=7, encoding=_CHARSET, debug=True, 
+            rollday=1, backupdays=7, encoding=_CHARSET, debug=True, mode=MODE_ALL_LOG, 
             thirdlist=_DISABLE_THIRD_LIST) :
         '''
         初始化日志器。
+        [param] name: 日志器名称，任意即可，建议唯一（相同名称在不同工程会取到同一个日志器）
         [param] log_dir: 日志输出目录
         [param] app_logs: 应用运行日志的名称字典，格式如 { name: min_level, ... }
         [param] logfile_format: 输出日志文件的格式
@@ -54,34 +59,44 @@ class ColorLog:
         [param] backupdays: 备份日志时长（单位：天）
         [param] encoding: 日志编码
         [param] debug: 是否打印 debug 日志
+        [param] mode: 日志模式
+                    - MODE_ALL_LOG: 打印所有日志（默认）
+                    - MODE_CONSOLE_LOG: 仅打印控制台日志
+                    - MODE_FILE_LOG: 仅打印文件日志（具体日志文件受 app_logs 参数控制）
         [param] thirdlist: 禁用的第三方日志列表
         :return: None
         '''
         self._debug = debug
         if not os.path.exists(log_dir) : os.mkdir(log_dir)
-        self._logger = logging.getLogger()              # 创建日志记录器
+
+        self._logger = logging.getLogger(name)          # 创建日志记录器
         self._logger.setLevel(logging.DEBUG)            # 设置默认日志记录器记录级别
-        self._init_handler(log_dir, app_logs, logfile_format, date_format, log_colors, rollday, backupdays, encoding)
+        self._init_handler(log_dir, app_logs, logfile_format, date_format, log_colors, rollday, backupdays, encoding, mode)
         self._disable_third_logs(thirdlist)
 
 
-    def _init_handler(self, log_dir, app_logs, logfile_format, date_format, log_colors, rollday, backupdays, encoding) :
+    def _init_handler(self, log_dir, app_logs, logfile_format, date_format, log_colors, rollday, backupdays, encoding, mode) :
         '''
         初始化日志处理器
         '''
-        # 控制台日志
-        console_handler = self._create_console_handler()
-        self._set_console_formatter(console_handler, logfile_format, date_format, log_colors)
-        console_handler.setLevel(logging.DEBUG)
-        self._logger.addHandler(console_handler)
+        # 因为 清空历史的 handlers，避免重复打印日志
+        self._logger.handlers = []
 
-        # 文件日志
-        for logname, level in app_logs.items() :
-            logpath = '%s/%s' % (log_dir, logname)
-            logfile_handler = self._create_logfile_handler(logpath, rollday, backupdays, encoding)  # 创建日志文件
-            self._set_logfile_formatter(logfile_handler, logfile_format, date_format)  # 设置日志格式
-            logfile_handler.setLevel(level)
-            self._logger.addHandler(logfile_handler)
+        # 控制台日志 handler
+        if (mode == MODE_ALL_LOG or mode == MODE_CONSOLE_LOG) :
+            console_handler = self._create_console_handler()
+            self._set_console_formatter(console_handler, logfile_format, date_format, log_colors)
+            console_handler.setLevel(logging.DEBUG)
+            self._logger.addHandler(console_handler)
+
+        # 文件日志 handler
+        if (mode == MODE_ALL_LOG or mode == MODE_FILE_LOG) :
+            for logname, level in app_logs.items() :
+                logpath = '%s/%s' % (log_dir, logname)
+                logfile_handler = self._create_logfile_handler(logpath, rollday, backupdays, encoding)  # 创建日志文件
+                self._set_logfile_formatter(logfile_handler, logfile_format, date_format)  # 设置日志格式
+                logfile_handler.setLevel(level)
+                self._logger.addHandler(logfile_handler)
 
 
     def _create_console_handler(self):
@@ -182,6 +197,6 @@ class ColorLog:
 
 
 
-log = ColorLog()
+log = ColorLog(name='DEFAULT_COLOR_LOGGER')
 
 
