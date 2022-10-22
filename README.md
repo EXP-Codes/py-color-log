@@ -25,6 +25,16 @@
 - 灵活可控的配置
 
 
+## 安装说明
+
+执行脚本： 
+
+```
+python -m pip install --upgrade pip
+python -m pip install py-color-log
+```
+
+
 ## 使用说明
 
 在代码中引入 py-color-log 包即可：
@@ -89,17 +99,3 @@ log = ColorLog(
 
 详见 [单元测试说明](tests)
 
-
-## 赞助途径
-
-| 支付宝 | 微信 |
-|:---:|:---:|
-| ![](imgs/donate-alipay.png) | ![](imgs/donate-wechat.png) |
-
-
-## 版权声明
-
-　[![Copyright (C) EXP,2016](https://img.shields.io/badge/Copyright%20(C)-EXP%202016-blue.svg)](http://exp-blog.com)　[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-
-- Site: [https://exp-blog.com](https://exp-blog.com) 
-- Mail: <a href="mailto:289065406@qq.com?subject=[EXP's Github]%20Your%20Question%20（请写下您的疑问）&amp;body=What%20can%20I%20help%20you?%20（需要我提供什么帮助吗？）">289065406@qq.com</a>
